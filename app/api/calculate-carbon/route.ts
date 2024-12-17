@@ -1,16 +1,27 @@
 import { NextResponse } from 'next/server';
 
-// Facteurs d'émission plus détaillés (en kg CO2 par km)
-const EMISSION_FACTORS = {
-  SHORT_HAUL: { // Vols < 1500 km
+type CabinClass = 'ECONOMY' | 'BUSINESS' | 'FIRST';
+
+interface EmissionFactors {
+  ECONOMY: number;
+  BUSINESS: number;
+  FIRST?: number;
+}
+
+const EMISSION_FACTORS: {
+  SHORT_HAUL: Omit<EmissionFactors, 'FIRST'>;
+  MEDIUM_HAUL: Omit<EmissionFactors, 'FIRST'>;
+  LONG_HAUL: EmissionFactors;
+} = {
+  SHORT_HAUL: {
     ECONOMY: 0.156,
     BUSINESS: 0.234,
   },
-  MEDIUM_HAUL: { // Vols 1500-3500 km
+  MEDIUM_HAUL: {
     ECONOMY: 0.131,
     BUSINESS: 0.197,
   },
-  LONG_HAUL: { // Vols > 3500 km
+  LONG_HAUL: {
     ECONOMY: 0.115,
     BUSINESS: 0.333,
     FIRST: 0.459,
@@ -36,12 +47,6 @@ const TRANSPORT_SPEEDS = {
 
 // Ajout de la vitesse moyenne d'un avion
 const PLANE_SPEED = 800; // km/h en vitesse de croisière
-
-interface CityInfo {
-  city: string;
-  country: string;
-  countryCode: string;
-}
 
 async function getCoordinates(city: string): Promise<{ lat: number; lng: number; country: string; countryCode: string }> {
   const apiKey = process.env.OPENCAGE_API_KEY;
@@ -75,7 +80,13 @@ async function getCoordinates(city: string): Promise<{ lat: number; lng: number;
   }
 }
 
-function calculateDistance(coord1: any, coord2: any) {
+// Ajout d'une interface pour les coordonnées
+interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
+function calculateDistance(coord1: Coordinates, coord2: Coordinates) {
   const R = 6371; // Rayon de la Terre en km
   const dLat = (coord2.lat - coord1.lat) * Math.PI / 180;
   const dLon = (coord2.lng - coord1.lng) * Math.PI / 180;

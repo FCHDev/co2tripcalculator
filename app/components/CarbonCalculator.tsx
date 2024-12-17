@@ -136,8 +136,12 @@ export default function CarbonCalculator() {
       } else {
         throw new Error('Données invalides reçues du serveur');
       }
-    } catch (error) {
-      setError('Une erreur est survenue lors du calcul');
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Une erreur est survenue lors du calcul');
+      }
       setResult(null);
     } finally {
       setLoading(false);

@@ -166,43 +166,43 @@ export default function CarbonCalculator() {
   };
 
   return (
-    <div className="min-h-screen bg-[#353036] py-6 sm:py-12 px-3 sm:px-6 lg:px-8 relative">
-      <div className="max-w-3xl mx-auto relative">
-        <div className="backdrop-blur-xl bg-[#353036]/30 rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 space-y-6 sm:space-y-8 border border-[#F5B700]/20">
+    <div className="min-h-screen bg-[#353036] py-2 sm:py-6 px-2 sm:px-3 lg:px-8 relative">
+      <div className="max-w-3xl mx-auto relative h-full">
+        <div className="backdrop-blur-xl bg-[#353036]/30 rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-8 space-y-4 sm:space-y-6 border border-[#F5B700]/20">
           <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#F5B700]">
+            <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-[#F5B700]">
               Calculateur CO₂
             </h1>
-            <p className="mt-2 text-sm sm:text-base text-[#F5B700]/80">
+            <p className="mt-1 sm:mt-2 text-base sm:text-base text-[#F5B700]/80">
               Estimez l&apos;empreinte carbone de votre voyage en avion
             </p>
           </div>
           
-          <form onSubmit={calculateCarbonFootprint} className="space-y-6">
-            <div className="space-y-4">
+          <form onSubmit={calculateCarbonFootprint} className="space-y-4 sm:space-y-6">
+            <div className="space-y-3 sm:space-y-4">
               <div className="group">
-                <label className="block text-sm font-medium text-[#F5B700] mb-1">
+                <label className="block text-base sm:text-sm font-medium text-[#F5B700] mb-1">
                   Ville de départ
                 </label>
                 <input
                   type="text"
                   value={departCity}
                   onChange={(e) => setDepartCity(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-[#F5B700]/20 bg-[#353036]/50 focus:border-[#F5B700] focus:ring-2 focus:ring-[#F5B700]/50 transition-all duration-300 text-[#F5B700] placeholder-[#F5B700]/30 backdrop-blur-sm"
+                  className="w-full px-4 py-4 sm:py-3 text-base rounded-xl border border-[#F5B700]/20 bg-[#353036]/50 focus:border-[#F5B700] focus:ring-2 focus:ring-[#F5B700]/50 transition-all duration-300 text-[#F5B700] placeholder-[#F5B700]/30 backdrop-blur-sm"
                   placeholder="Paris, France"
                   required
                 />
               </div>
 
               <div className="group">
-                <label className="block text-sm font-medium text-[#F5B700] mb-1">
+                <label className="block text-base sm:text-sm font-medium text-[#F5B700] mb-1">
                   Ville d&apos;arrivée
                 </label>
                 <input
                   type="text"
                   value={arrivalCity}
                   onChange={(e) => setArrivalCity(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-[#F5B700]/20 bg-[#353036]/50 focus:border-[#F5B700] focus:ring-2 focus:ring-[#F5B700]/50 transition-all duration-300 text-[#F5B700] placeholder-[#F5B700]/30 backdrop-blur-sm"
+                  className="w-full px-4 py-4 sm:py-3 text-base rounded-xl border border-[#F5B700]/20 bg-[#353036]/50 focus:border-[#F5B700] focus:ring-2 focus:ring-[#F5B700]/50 transition-all duration-300 text-[#F5B700] placeholder-[#F5B700]/30 backdrop-blur-sm"
                   placeholder="New York, États-Unis"
                   required
                 />
@@ -242,7 +242,7 @@ export default function CarbonCalculator() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#F5B700] text-[#353036] py-3 px-6 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-[#F5B700]/50 focus:ring-offset-2 focus:ring-offset-[#353036] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] hover:bg-[#F5B700]/90"
+              className="w-full bg-[#F5B700] text-[#353036] py-4 sm:py-3 px-6 text-lg sm:text-base rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-[#F5B700]/50 focus:ring-offset-2 focus:ring-offset-[#353036] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] hover:bg-[#F5B700]/90"
             >
               {loading ? (
                 <span className="flex items-center justify-center">
@@ -265,13 +265,13 @@ export default function CarbonCalculator() {
           {result && result.details && result.details.cities && result.details.alternatives && (
             <div className="space-y-4 sm:space-y-6">
               {/* Conteneur principal des résultats */}
-              <div className="backdrop-blur-xl bg-[#353036]/40 p-4 sm:p-8 rounded-xl border border-[#F5B700]/30 shadow-lg">
+              <div className="backdrop-blur-xl bg-[#353036]/40 p-3 sm:p-8 rounded-xl border border-[#F5B700]/30 shadow-lg">
                 {/* En-tête avec effet de séparation */}
                 <div className="relative pb-4 sm:pb-6 mb-4 sm:mb-6">
                   <h2 className="text-xl sm:text-2xl font-bold text-[#F5B700] mb-2">
                     Résultats {isRoundTrip ? '(Aller-retour)' : '(Aller simple)'}
                   </h2>
-                  <p className="text-xs sm:text-sm text-[#F5B700]/70 flex items-center gap-2">
+                  <p className="text-sm sm:text-xs text-[#F5B700]/70 flex items-center gap-2">
                     <span className="flex items-center">
                       {result.details.cities.depart?.countryCode && 
                         getFlag(result.details.cities.depart.countryCode)

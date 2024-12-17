@@ -5,6 +5,7 @@
 [build.environment]
   NEXT_PUBLIC_NODE_ENV = "production"
   NODE_VERSION = "18.17.0"
+  OPENCAGE_API_KEY = "5dca23c36c7341b08aed18609d3eabe2"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs" 

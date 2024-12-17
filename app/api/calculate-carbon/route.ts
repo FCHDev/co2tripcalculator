@@ -8,11 +8,13 @@ interface EmissionFactors {
   FIRST?: number;
 }
 
-const EMISSION_FACTORS: {
-  SHORT_HAUL: Omit<EmissionFactors, 'FIRST'>;
-  MEDIUM_HAUL: Omit<EmissionFactors, 'FIRST'>;
+interface EmissionFactorsConfig {
+  SHORT_HAUL: Pick<EmissionFactors, 'ECONOMY' | 'BUSINESS'>;
+  MEDIUM_HAUL: Pick<EmissionFactors, 'ECONOMY' | 'BUSINESS'>;
   LONG_HAUL: EmissionFactors;
-} = {
+}
+
+const EMISSION_FACTORS: EmissionFactorsConfig = {
   SHORT_HAUL: {
     ECONOMY: 0.156,
     BUSINESS: 0.234,
@@ -103,15 +105,15 @@ function calculateDistance(coord1: Coordinates, coord2: Coordinates) {
   return distance;
 }
 
-function getEmissionFactor(distance: number, cabinClass: CabinClass = 'ECONOMY') {
+function getEmissionFactor(distance: number, cabinClass: CabinClass = 'ECONOMY'): number {
   if (distance < 1500) {
-    // @ts-ignore
+    if (cabinClass === 'FIRST') return EMISSION_FACTORS.LONG_HAUL.BUSINESS; // Fallback pour First en court-courrier
     return EMISSION_FACTORS.SHORT_HAUL[cabinClass];
   } else if (distance < 3500) {
-    // @ts-ignore
+    if (cabinClass === 'FIRST') return EMISSION_FACTORS.LONG_HAUL.BUSINESS; // Fallback pour First en moyen-courrier
     return EMISSION_FACTORS.MEDIUM_HAUL[cabinClass];
   } else {
-    return EMISSION_FACTORS.LONG_HAUL[cabinClass];
+    return <number>EMISSION_FACTORS.LONG_HAUL[cabinClass];
   }
 }
 

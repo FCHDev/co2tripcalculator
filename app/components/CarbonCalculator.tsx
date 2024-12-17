@@ -257,7 +257,7 @@ export default function CarbonCalculator() {
                   </svg>
                   Calcul en cours...
                 </span>
-              ) : 'Calculer l&apos;empreinte carbone'}
+              ) : 'Calculer l&apos;empreinte carbone&apos;'}
             </button>
           </form>
 
@@ -545,8 +545,8 @@ export default function CarbonCalculator() {
                        !result.details.alternatives?.car?.available && (
                         <div className="text-center p-8 text-[#08A045] bg-[#08A045]/15 rounded-lg backdrop-blur-sm border border-[#08A045]/30 shadow-inner">
                           <span className="text-4xl block mb-4">🛫</span>
-                          <p className="font-medium text-lg mb-2">Aucune alternative terrestre n'est recommandée pour cette distance</p>
-                          <p className="text-[#08A045]/70">L'avion est le moyen de transport le plus adapté pour ce trajet</p>
+                          <p className="font-medium text-lg mb-2">Aucune alternative terrestre n&apos;est recommandée pour cette distance</p>
+                          <p className="text-[#08A045]/70">L&apos;avion est le moyen de transport le plus adapté pour ce trajet</p>
                         </div>
                       )}
                     </div>

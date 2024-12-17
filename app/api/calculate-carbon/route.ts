@@ -116,6 +116,7 @@ function getEmissionFactor(distance: number, cabinClass: CabinClass = 'ECONOMY')
     return <number>EMISSION_FACTORS.LONG_HAUL[cabinClass];
   }
 }
+//comment
 
 export async function POST(request: Request) {
   try {

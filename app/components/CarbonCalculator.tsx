@@ -201,7 +201,7 @@ export default function CarbonCalculator() {
 
               <div className="group">
                 <label className="block text-sm font-medium text-[#F5B700] mb-1">
-                  Ville d'arrivée
+                  Ville d&apos;arrivée
                 </label>
                 <input
                   type="text"

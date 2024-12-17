@@ -166,14 +166,9 @@ export default function CarbonCalculator() {
   };
 
   return (
-    <div className="min-h-screen bg-[#564E58] py-6 sm:py-12 px-3 sm:px-6 lg:px-8 relative overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-[#F5B700]/20 to-transparent rounded-full blur-3xl transform rotate-12"></div>
-        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-[#F5B700]/10 to-transparent rounded-full blur-3xl"></div>
-      </div>
-
+    <div className="min-h-screen bg-[#353036] py-6 sm:py-12 px-3 sm:px-6 lg:px-8 relative">
       <div className="max-w-3xl mx-auto relative">
-        <div className="backdrop-blur-xl bg-[#564E58]/30 rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 space-y-6 sm:space-y-8 border border-[#F5B700]/20">
+        <div className="backdrop-blur-xl bg-[#353036]/30 rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 space-y-6 sm:space-y-8 border border-[#F5B700]/20">
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#F5B700]">
               Calculateur CO₂
@@ -193,7 +188,7 @@ export default function CarbonCalculator() {
                   type="text"
                   value={departCity}
                   onChange={(e) => setDepartCity(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-[#F5B700]/20 bg-[#564E58]/50 focus:border-[#F5B700] focus:ring-2 focus:ring-[#F5B700]/50 transition-all duration-300 text-[#F5B700] placeholder-[#F5B700]/30 backdrop-blur-sm"
+                  className="w-full px-4 py-3 rounded-xl border border-[#F5B700]/20 bg-[#353036]/50 focus:border-[#F5B700] focus:ring-2 focus:ring-[#F5B700]/50 transition-all duration-300 text-[#F5B700] placeholder-[#F5B700]/30 backdrop-blur-sm"
                   placeholder="Paris, France"
                   required
                 />
@@ -207,7 +202,7 @@ export default function CarbonCalculator() {
                   type="text"
                   value={arrivalCity}
                   onChange={(e) => setArrivalCity(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-[#F5B700]/20 bg-[#564E58]/50 focus:border-[#F5B700] focus:ring-2 focus:ring-[#F5B700]/50 transition-all duration-300 text-[#F5B700] placeholder-[#F5B700]/30 backdrop-blur-sm"
+                  className="w-full px-4 py-3 rounded-xl border border-[#F5B700]/20 bg-[#353036]/50 focus:border-[#F5B700] focus:ring-2 focus:ring-[#F5B700]/50 transition-all duration-300 text-[#F5B700] placeholder-[#F5B700]/30 backdrop-blur-sm"
                   placeholder="New York, États-Unis"
                   required
                 />
@@ -221,11 +216,11 @@ export default function CarbonCalculator() {
                   <select
                     value={cabinClass}
                     onChange={(e) => setCabinClass(e.target.value as CabinClass)}
-                    className="w-full px-4 py-3 rounded-xl border border-[#F5B700]/20 bg-[#564E58]/50 focus:border-[#F5B700] focus:ring-2 focus:ring-[#F5B700]/50 transition-all duration-300 text-[#F5B700] backdrop-blur-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-[#F5B700]/20 bg-[#353036]/50 focus:border-[#F5B700] focus:ring-2 focus:ring-[#F5B700]/50 transition-all duration-300 text-[#F5B700] backdrop-blur-sm"
                   >
-                    <option value="ECONOMY" className="bg-[#564E58]">Économique</option>
-                    <option value="BUSINESS" className="bg-[#564E58]">Affaires</option>
-                    <option value="FIRST" className="bg-[#564E58]">Première (long-courrier uniquement)</option>
+                    <option value="ECONOMY" className="bg-[#353036]">Économique</option>
+                    <option value="BUSINESS" className="bg-[#353036]">Affaires</option>
+                    <option value="FIRST" className="bg-[#353036]">Première (long-courrier uniquement)</option>
                   </select>
                 </div>
 
@@ -235,7 +230,7 @@ export default function CarbonCalculator() {
                     id="roundTrip"
                     checked={isRoundTrip}
                     onChange={(e) => setIsRoundTrip(e.target.checked)}
-                    className="h-4 w-4 text-[#F5B700] focus:ring-[#F5B700]/50 border-[#F5B700]/20 rounded cursor-pointer bg-[#564E58]/50"
+                    className="h-4 w-4 text-[#F5B700] focus:ring-[#F5B700]/50 border-[#F5B700]/20 rounded cursor-pointer bg-[#353036]/50"
                   />
                   <label htmlFor="roundTrip" className="ml-2 block text-sm text-[#F5B700] cursor-pointer">
                     Calculer pour un aller-retour
@@ -247,11 +242,11 @@ export default function CarbonCalculator() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#F5B700] text-[#564E58] py-3 px-6 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-[#F5B700]/50 focus:ring-offset-2 focus:ring-offset-[#564E58] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] hover:bg-[#F5B700]/90"
+              className="w-full bg-[#F5B700] text-[#353036] py-3 px-6 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-[#F5B700]/50 focus:ring-offset-2 focus:ring-offset-[#353036] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] hover:bg-[#F5B700]/90"
             >
               {loading ? (
                 <span className="flex items-center justify-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-[#564E58]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-[#353036]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
@@ -270,7 +265,7 @@ export default function CarbonCalculator() {
           {result && result.details && result.details.cities && result.details.alternatives && (
             <div className="space-y-4 sm:space-y-6">
               {/* Conteneur principal des résultats */}
-              <div className="backdrop-blur-xl bg-[#564E58]/40 p-4 sm:p-8 rounded-xl border border-[#F5B700]/30 shadow-lg">
+              <div className="backdrop-blur-xl bg-[#353036]/40 p-4 sm:p-8 rounded-xl border border-[#F5B700]/30 shadow-lg">
                 {/* En-tête avec effet de séparation */}
                 <div className="relative pb-4 sm:pb-6 mb-4 sm:mb-6">
                   <h2 className="text-xl sm:text-2xl font-bold text-[#F5B700] mb-2">
@@ -296,13 +291,13 @@ export default function CarbonCalculator() {
 
                 <div className="space-y-6 sm:space-y-8">
                   {/* Carte principale avec les informations essentielles */}
-                  <div className="bg-[#564E58]/60 rounded-lg p-3 sm:p-5 border border-[#F5B700]/20 backdrop-blur-md">
+                  <div className="bg-[#353036]/60 rounded-lg p-3 sm:p-5 border border-[#F5B700]/20 backdrop-blur-md">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                      <div className="text-center p-3 bg-[#564E58]/40 rounded-lg backdrop-blur-sm">
+                      <div className="text-center p-3 bg-[#353036]/40 rounded-lg backdrop-blur-sm">
                         <p className="text-[#F5B700]/70 text-xs sm:text-sm mb-1">Distance totale</p>
                         <p className="text-[#F5B700] text-xl sm:text-2xl font-bold">{result.distance?.toFixed(0)} km</p>
                       </div>
-                      <div className="text-center p-3 bg-[#564E58]/40 rounded-lg backdrop-blur-sm">
+                      <div className="text-center p-3 bg-[#353036]/40 rounded-lg backdrop-blur-sm">
                         <p className="text-[#F5B700]/70 text-xs sm:text-sm mb-1">Impact total</p>
                         <p className="text-[#F5B700] text-xl sm:text-2xl font-bold">{(result.details.totalImpact / 1000).toFixed(3)}</p>
                         <p className="text-[#F5B700]/60 text-xs">tCO₂e/passager</p>
@@ -316,7 +311,7 @@ export default function CarbonCalculator() {
                     
                     <div className="space-y-3">
                       {/* Émissions en vol */}
-                      <div className="bg-[#564E58]/30 p-3 sm:p-4 rounded-lg backdrop-blur-sm border-l-4 border-[#F5B700]/40">
+                      <div className="bg-[#353036]/30 p-3 sm:p-4 rounded-lg backdrop-blur-sm border-l-4 border-[#F5B700]/40">
                         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
                           <div>
                             <p className="text-[#F5B700] font-medium text-sm sm:text-base">Émissions en vol</p>
@@ -330,7 +325,7 @@ export default function CarbonCalculator() {
                       </div>
 
                       {/* Décollage et atterrissage */}
-                      <div className="bg-[#564E58]/30 p-3 sm:p-4 rounded-lg backdrop-blur-sm border-l-4 border-[#F5B700]/40">
+                      <div className="bg-[#353036]/30 p-3 sm:p-4 rounded-lg backdrop-blur-sm border-l-4 border-[#F5B700]/40">
                         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
                           <div>
                             <p className="text-[#F5B700] font-medium text-sm sm:text-base">Décollage et atterrissage</p>
@@ -344,7 +339,7 @@ export default function CarbonCalculator() {
                       </div>
 
                       {/* Traînées de condensation */}
-                      <div className="bg-[#564E58]/30 p-3 sm:p-4 rounded-lg backdrop-blur-sm border-l-4 border-[#F5B700]/40">
+                      <div className="bg-[#353036]/30 p-3 sm:p-4 rounded-lg backdrop-blur-sm border-l-4 border-[#F5B700]/40">
                         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
                           <div>
                             <div className="flex items-center">
@@ -353,7 +348,7 @@ export default function CarbonCalculator() {
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#F5B700]/50 cursor-help" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span className="invisible group-hover:visible absolute -top-2 left-6 w-72 bg-[#564E58]/95 text-[#F5B700] text-xs rounded-lg p-3 transform -translate-y-full border border-[#F5B700]/20 shadow-lg z-10">
+                                <span className="invisible group-hover:visible absolute -top-2 left-6 w-72 bg-[#353036]/95 text-[#F5B700] text-xs rounded-lg p-3 transform -translate-y-full border border-[#F5B700]/20 shadow-lg z-10">
                                   Les traînées de condensation sont des nuages artificiels créés par les avions qui ont un impact significatif sur le réchauffement climatique
                                 </span>
                               </span>
@@ -414,7 +409,7 @@ export default function CarbonCalculator() {
                   </div>
 
                   {/* Informations complémentaires */}
-                  <div className="bg-[#564E58]/20 rounded-lg p-3 sm:p-4 backdrop-blur-sm border border-[#F5B700]/10">
+                  <div className="bg-[#353036]/20 rounded-lg p-3 sm:p-4 backdrop-blur-sm border border-[#F5B700]/10">
                     <h3 className="text-[#F5B700] font-medium text-sm sm:text-base mb-2 sm:mb-3">Informations complémentaires</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 text-xs sm:text-sm">
                       <div>
@@ -568,7 +563,7 @@ export default function CarbonCalculator() {
               <button
                 onClick={resetForm}
                 type="button"
-                className="w-full backdrop-blur-sm bg-[#564E58]/50 text-[#F5B700] py-2.5 sm:py-3 px-4 sm:px-6 rounded-xl font-medium border border-[#F5B700]/20 hover:bg-[#564E58]/70 focus:outline-none focus:ring-2 focus:ring-[#F5B700]/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
+                className="w-full backdrop-blur-sm bg-[#353036]/50 text-[#F5B700] py-2.5 sm:py-3 px-4 sm:px-6 rounded-xl font-medium border border-[#F5B700]/20 hover:bg-[#353036]/70 focus:outline-none focus:ring-2 focus:ring-[#F5B700]/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
               >
                 <span className="flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

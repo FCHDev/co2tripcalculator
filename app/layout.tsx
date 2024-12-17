@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className={`${inter.className} ${poppins.className} min-h-screen bg-[#564E58]`}>
+      <body className={`${inter.className} ${poppins.className} min-h-screen bg-[#353036]`}>
         {children}
       </body>
     </html>

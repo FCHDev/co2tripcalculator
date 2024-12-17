@@ -179,7 +179,7 @@ export default function CarbonCalculator() {
               Calculateur CO₂
             </h1>
             <p className="mt-2 text-sm sm:text-base text-[#F5B700]/80">
-              Estimez l'empreinte carbone de votre voyage en avion
+              Estimez l&apos;empreinte carbone de votre voyage en avion
             </p>
           </div>
           
@@ -257,7 +257,7 @@ export default function CarbonCalculator() {
                   </svg>
                   Calcul en cours...
                 </span>
-              ) : 'Calculer l\'empreinte carbone'}
+              ) : 'Calculer l&apos;empreinte carbone'}
             </button>
           </form>
 

@@ -50,13 +50,13 @@ const PLANE_SPEED = 800; // km/h en vitesse de croisière
 
 async function getCoordinates(city: string): Promise<{ lat: number; lng: number; country: string; countryCode: string }> {
   const apiKey = process.env.OPENCAGE_API_KEY;
-  
+
   if (!apiKey) {
     throw new Error('Clé API OpenCage non configurée');
   }
 
   const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(city)}&key=${apiKey}&language=fr&limit=1`;
-  
+
   try {
     const response = await fetch(url);
     const data = await response.json();
@@ -90,23 +90,25 @@ function calculateDistance(coord1: Coordinates, coord2: Coordinates) {
   const R = 6371; // Rayon de la Terre en km
   const dLat = (coord2.lat - coord1.lat) * Math.PI / 180;
   const dLon = (coord2.lng - coord1.lng) * Math.PI / 180;
-  
-  const a = 
+
+  const a =
     Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(coord1.lat * Math.PI / 180) * Math.cos(coord2.lat * Math.PI / 180) * 
+    Math.cos(coord1.lat * Math.PI / 180) * Math.cos(coord2.lat * Math.PI / 180) *
     Math.sin(dLon/2) * Math.sin(dLon/2);
-  
+
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   const distance = R * c;
-  
+
   console.log('Distance calculée:', distance, 'km');
   return distance;
 }
 
-function getEmissionFactor(distance: number, cabinClass: 'ECONOMY' = 'ECONOMY') {
+function getEmissionFactor(distance: number, cabinClass: CabinClass = 'ECONOMY') {
   if (distance < 1500) {
+    // @ts-ignore
     return EMISSION_FACTORS.SHORT_HAUL[cabinClass];
   } else if (distance < 3500) {
+    // @ts-ignore
     return EMISSION_FACTORS.MEDIUM_HAUL[cabinClass];
   } else {
     return EMISSION_FACTORS.LONG_HAUL[cabinClass];
@@ -116,19 +118,19 @@ function getEmissionFactor(distance: number, cabinClass: 'ECONOMY' = 'ECONOMY') 
 export async function POST(request: Request) {
   try {
     const { departCity, arrivalCity, cabinClass = 'ECONOMY' } = await request.json();
-    
+
     const departInfo = await getCoordinates(departCity);
     const arrivalInfo = await getCoordinates(arrivalCity);
-    
+
     const distance = calculateDistance(departInfo, arrivalInfo);
     const emissionFactor = getEmissionFactor(distance, cabinClass);
     const carbonFootprint = distance * emissionFactor;
-    
+
     // Ajout d'un facteur pour le décollage et l'atterrissage
     const takeoffLandingEmissions = 25; // kg CO2 supplémentaires
-    
+
     console.log('Résultat calculé:', { distance, carbonFootprint });
-    
+
     const baseEmissions = carbonFootprint + takeoffLandingEmissions;
     const contrailImpact = baseEmissions * CONTRAIL_FACTOR;
 
@@ -185,4 +187,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

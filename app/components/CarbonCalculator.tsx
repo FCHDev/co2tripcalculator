@@ -465,6 +465,9 @@ export default function CarbonCalculator() {
                                     ` ${result.details.alternatives.train.duration % 60}min` : ''}
                                   {isRoundTrip ? ' (A/R)' : ''}
                                 </p>
+                                <p className="text-[#16F36F] font-bold mt-1">
+                                  -{Math.round((1 - result.details.alternatives.train.emissions / result.details.totalImpact) * 100)}% d&apos;émissions
+                                </p>
                               </div>
                             </div>
                             <div className="text-right">
@@ -490,6 +493,9 @@ export default function CarbonCalculator() {
                                     ` ${result.details.alternatives.bus.duration % 60}min` : ''}
                                   {isRoundTrip ? ' (A/R)' : ''}
                                 </p>
+                                <p className="text-[#16F36F] font-bold mt-1">
+                                  -{Math.round((1 - result.details.alternatives.bus.emissions / result.details.totalImpact) * 100)}% d&apos;émissions
+                                </p>
                               </div>
                             </div>
                             <div className="text-right">
@@ -514,6 +520,9 @@ export default function CarbonCalculator() {
                                   {result.details.alternatives.car.duration % 60 ? 
                                     ` ${result.details.alternatives.car.duration % 60}min` : ''}
                                   {isRoundTrip ? ' (A/R)' : ''}
+                                </p>
+                                <p className="text-[#16F36F] font-bold mt-1">
+                                  -{Math.round((1 - result.details.alternatives.car.sharedEmissions / result.details.totalImpact) * 100)}% d&apos;émissions
                                 </p>
                               </div>
                             </div>

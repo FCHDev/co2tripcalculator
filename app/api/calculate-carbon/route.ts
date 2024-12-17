@@ -42,9 +42,9 @@ const TRANSPORT_EMISSIONS = {
 
 // Vitesses moyennes des transports (en km/h)
 const TRANSPORT_SPEEDS = {
-  TRAIN: 250,     // TGV
-  BUS: 90,        // Autocar
-  CAR: 110        // Voiture sur autoroute
+  TRAIN: 200,     // Mise à jour pour correspondre à REAL_SPEEDS
+  BUS: 70,
+  CAR: 90
 };
 
 // Ajout de la vitesse moyenne d'un avion
@@ -89,6 +89,10 @@ interface Coordinates {
   lng: number;
 }
 
+// Coordonnées approximatives
+const paris = { lat: 48.8566, lng: 2.3522 };
+const strasbourg = { lat: 48.5734, lng: 7.7521 };
+
 function calculateDistance(coord1: Coordinates, coord2: Coordinates) {
   const R = 6371; // Rayon de la Terre en km
   const dLat = (coord2.lat - coord1.lat) * Math.PI / 180;
@@ -116,7 +120,46 @@ function getEmissionFactor(distance: number, cabinClass: CabinClass = 'ECONOMY')
     return <number>EMISSION_FACTORS.LONG_HAUL[cabinClass];
   }
 }
-//comment
+
+function calculateTravelDuration(distance: number, mode: 'TRAIN' | 'BUS' | 'CAR', isRoundTrip: boolean) {
+  // Distances réelles moyennes (pour tenir compte des routes)
+  const ROUTE_FACTOR = {
+    TRAIN: 1.1,    // Les voies ferrées ne sont pas en ligne droite
+    BUS: 1.2,      // Les routes sont plus longues que la distance à vol d'oiseau
+    CAR: 1.2       // Idem pour la voiture
+  };
+
+  // Vitesses commerciales moyennes
+  const SPEEDS = {
+    TRAIN: 250,    // TGV sur ligne à grande vitesse
+    BUS: 90,       // Bus sur autoroute
+    CAR: 110       // Voiture sur autoroute
+  };
+
+  // Distance réelle pour un trajet
+  const realDistance = distance * ROUTE_FACTOR[mode];
+  
+  // Temps de base en minutes pour un trajet
+  const baseTime = Math.ceil((realDistance / SPEEDS[mode]) * 60);
+  
+  // Temps additionnel fixe par trajet
+  const fixedTime = {
+    TRAIN: 15,     // Embarquement, contrôles
+    BUS: 20,       // Embarquement
+    CAR: 0         // Pas de temps fixe
+  };
+
+  // Pauses en fonction de la durée (une pause toutes les 2h)
+  const breakTime = mode === 'CAR' || mode === 'BUS'
+    ? Math.floor(baseTime / 120) * 15
+    : 0;
+
+  // Temps total pour un trajet
+  const singleTripTime = baseTime + fixedTime[mode] + breakTime;
+
+  // Retourner le temps total
+  return isRoundTrip ? singleTripTime * 2 : singleTripTime;
+}
 
 export async function POST(request: Request) {
   try {
@@ -134,6 +177,22 @@ export async function POST(request: Request) {
     
     // Calcul de la distance de base (aller simple)
     const distance = calculateDistance(departInfo, arrivalInfo);
+    console.log(`Distance calculée: ${distance}km`);
+
+    // Pour Paris-Strasbourg, vérifions les coordonnées
+    console.log('Coordonnées départ:', departInfo);
+    console.log('Coordonnées arrivée:', arrivalInfo);
+
+    // Vérifions les temps calculés
+    const trainDuration = calculateTravelDuration(distance, 'TRAIN', isRoundTrip);
+    const busDuration = calculateTravelDuration(distance, 'BUS', isRoundTrip);
+    const carDuration = calculateTravelDuration(distance, 'CAR', isRoundTrip);
+
+    console.log('Durées calculées (minutes):', {
+      train: trainDuration,
+      bus: busDuration,
+      car: carDuration
+    });
 
     // Facteur multiplicateur pour l'aller-retour
     const tripFactor = isRoundTrip ? 2 : 1;
@@ -153,19 +212,19 @@ export async function POST(request: Request) {
     const alternatives = {
       train: {
         emissions: totalDistance * TRANSPORT_EMISSIONS.TRAIN,
-        duration: Math.ceil(totalDistance / TRANSPORT_SPEEDS.TRAIN * 60), // en minutes
-        available: totalDistance < 1000 // Le train est considéré comme viable pour < 1000km
+        duration: calculateTravelDuration(distance, 'TRAIN', isRoundTrip),
+        available: distance < 1000
       },
       bus: {
         emissions: totalDistance * TRANSPORT_EMISSIONS.BUS,
-        duration: Math.ceil(totalDistance / TRANSPORT_SPEEDS.BUS * 60),
-        available: totalDistance < 1200 // Le bus est viable pour < 1200km
+        duration: calculateTravelDuration(distance, 'BUS', isRoundTrip),
+        available: distance < 1200
       },
       car: {
         emissions: totalDistance * TRANSPORT_EMISSIONS.CAR,
         sharedEmissions: totalDistance * TRANSPORT_EMISSIONS.CAR_SHARED,
-        duration: Math.ceil(totalDistance / TRANSPORT_SPEEDS.CAR * 60),
-        available: totalDistance < 1500 // La voiture est viable pour < 1500km
+        duration: calculateTravelDuration(distance, 'CAR', isRoundTrip),
+        available: distance < 1500
       }
     };
 

@@ -11,16 +11,13 @@ export function AlternativeTransports({ result, isRoundTrip }: AlternativeTransp
   const { alternatives } = result.details;
   const alternativesArray = [];
 
-  // Facteur multiplicateur pour l'aller-retour
-  const tripFactor = isRoundTrip ? 2 : 1;
-
   if (alternatives?.train?.available) {
     alternativesArray.push({
       mode: 'Train',
       icon: '🚄',
-      emissions: alternatives.train.emissions * tripFactor,
-      duration: alternatives.train.duration * tripFactor,
-      reduction: ((result.details.totalImpact - (alternatives.train.emissions * tripFactor)) / result.details.totalImpact) * 100
+      emissions: alternatives.train.emissions,
+      duration: alternatives.train.duration,
+      reduction: ((result.details.totalImpact - alternatives.train.emissions) / result.details.totalImpact) * 100
     });
   }
 
@@ -28,9 +25,9 @@ export function AlternativeTransports({ result, isRoundTrip }: AlternativeTransp
     alternativesArray.push({
       mode: 'Bus',
       icon: '🚌',
-      emissions: alternatives.bus.emissions * tripFactor,
-      duration: alternatives.bus.duration * tripFactor,
-      reduction: ((result.details.totalImpact - (alternatives.bus.emissions * tripFactor)) / result.details.totalImpact) * 100
+      emissions: alternatives.bus.emissions,
+      duration: alternatives.bus.duration,
+      reduction: ((result.details.totalImpact - alternatives.bus.emissions) / result.details.totalImpact) * 100
     });
   }
 
@@ -38,9 +35,9 @@ export function AlternativeTransports({ result, isRoundTrip }: AlternativeTransp
     alternativesArray.push({
       mode: 'Voiture',
       icon: '🚗',
-      emissions: alternatives.car.sharedEmissions * tripFactor,
-      duration: alternatives.car.duration * tripFactor,
-      reduction: ((result.details.totalImpact - (alternatives.car.sharedEmissions * tripFactor)) / result.details.totalImpact) * 100
+      emissions: alternatives.car.sharedEmissions,
+      duration: alternatives.car.duration,
+      reduction: ((result.details.totalImpact - alternatives.car.sharedEmissions) / result.details.totalImpact) * 100
     });
   }
 
@@ -67,8 +64,9 @@ export function AlternativeTransports({ result, isRoundTrip }: AlternativeTransp
                 </p>
               </div>
             </div>
-            <div className="text-sm text-accent/80">
-              <p>Durée : {formatDuration(alternative.duration, isRoundTrip)}</p>
+            <div className="text-sm text-accent/80 space-y-1">
+              <p>Durée totale : {formatDuration(alternative.duration, isRoundTrip)}</p>
+              <p>Durée trajet : {formatDuration(alternative.duration / (isRoundTrip ? 2 : 1), false)}</p>
             </div>
           </div>
         ))}

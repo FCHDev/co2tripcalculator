@@ -1,15 +1,24 @@
-export function formatDuration(minutes: number, isRoundTrip: boolean = false): string {
-  const totalMinutes = isRoundTrip ? minutes * 2 : minutes;
-  const hours = Math.floor(totalMinutes / 60);
-  const remainingMinutes = totalMinutes % 60;
-  
-  let result = `${hours}h`;
-  if (remainingMinutes) {
-    result += ` ${remainingMinutes}min`;
+export function formatDuration(minutes: number, isRoundTrip: boolean): string {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  // Construction de la chaîne de caractères
+  let duration = '';
+
+  // Ajout des heures
+  if (hours > 0) {
+    duration += `${hours}h`;
   }
+
+  // Ajout des minutes (avec un zéro devant si nécessaire)
+  if (remainingMinutes > 0) {
+    duration += `${remainingMinutes < 10 ? '0' : ''}${remainingMinutes}`;
+  }
+
+  // Ajout de l'indication aller-retour si nécessaire
   if (isRoundTrip) {
-    result += ' (A/R)';
+    duration += ' (A/R)';
   }
-  
-  return result;
+
+  return duration || '0min';
 } 

@@ -1,3 +1,7 @@
+interface FooterProps {
+  result: boolean;
+}
+
 export function Footer({ result }: FooterProps) {
   return (
     <footer className={`text-center text-xs text-secondary/60 space-y-2 

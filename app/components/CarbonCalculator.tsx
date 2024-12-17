@@ -257,7 +257,7 @@ export default function CarbonCalculator() {
                   </svg>
                   Calcul en cours...
                 </span>
-              ) : 'Calculer l&apos;empreinte carbone&apos;'}
+              ) : '✈️ Décollage ! ✈️'}
             </button>
           </form>
 

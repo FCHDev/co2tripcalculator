@@ -11,6 +11,9 @@ const nextConfig = {
   output: 'standalone',
   images: {
     unoptimized: true,
+  },
+  env: {
+    OPENCAGE_API_KEY: process.env.OPENCAGE_API_KEY,
   }
 };
 

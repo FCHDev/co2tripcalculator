@@ -50,24 +50,25 @@ const TRANSPORT_SPEEDS = {
 // Ajout de la vitesse moyenne d'un avion
 const PLANE_SPEED = 800; // km/h en vitesse de croisière
 
-async function getCoordinates(city: string): Promise<{ lat: number; lng: number; country: string; countryCode: string }> {
+async function getCoordinates(city: string) {
+  // Remplacer la clé en dur par une variable d'environnement
   const apiKey = process.env.OPENCAGE_API_KEY;
-
   if (!apiKey) {
-    throw new Error('Clé API OpenCage non configurée');
+    throw new Error('La clé API OpenCage n\'est pas configurée');
   }
-
   const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(city)}&key=${apiKey}&language=fr&limit=1`;
 
   try {
     const response = await fetch(url);
-    const data = await response.json();
-
     if (!response.ok) {
-      throw new Error(`Erreur API: ${data.status.message}`);
+      const data = await response.json();
+      console.error('OpenCage API error:', data);
+      throw new Error(`Erreur API: ${data.status?.message || 'Erreur inconnue'}`);
     }
 
-    if (!data.results || data.results.length === 0) {
+    const data = await response.json();
+    if (!data.results?.[0]?.geometry) {
+      console.error('No results found for city:', city, 'API response:', data);
       throw new Error(`Aucun résultat trouvé pour: ${city}`);
     }
 
@@ -77,8 +78,8 @@ async function getCoordinates(city: string): Promise<{ lat: number; lng: number;
 
     return { lat, lng, country, countryCode };
   } catch (error) {
-    console.error('Erreur lors de la recherche des coordonnées pour', city, ':', error);
-    throw new Error(`Erreur lors de la recherche de: ${city}`);
+    console.error('Detailed error:', error);
+    throw error;
   }
 }
 
@@ -101,7 +102,6 @@ function calculateDistance(coord1: Coordinates, coord2: Coordinates) {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   const distance = R * c;
 
-  console.log('Distance calculée:', distance, 'km');
   return distance;
 }
 
@@ -120,52 +120,64 @@ function getEmissionFactor(distance: number, cabinClass: CabinClass = 'ECONOMY')
 
 export async function POST(request: Request) {
   try {
-    const { departCity, arrivalCity, cabinClass = 'ECONOMY' } = await request.json();
+    const { departCity, arrivalCity, cabinClass, isRoundTrip } = await request.json();
+    
+    if (!departCity || !arrivalCity) {
+      return NextResponse.json(
+        { error: 'Veuillez remplir tous les champs' },
+        { status: 400 }
+      );
+    }
 
     const departInfo = await getCoordinates(departCity);
     const arrivalInfo = await getCoordinates(arrivalCity);
-
+    
+    // Calcul de la distance de base (aller simple)
     const distance = calculateDistance(departInfo, arrivalInfo);
-    const emissionFactor = getEmissionFactor(distance, cabinClass);
-    const carbonFootprint = distance * emissionFactor;
 
-    // Ajout d'un facteur pour le décollage et l'atterrissage
-    const takeoffLandingEmissions = 25; // kg CO2 supplémentaires
+    // Facteur multiplicateur pour l'aller-retour
+    const tripFactor = isRoundTrip ? 2 : 1;
+    const totalDistance = distance * tripFactor;
 
-    console.log('Résultat calculé:', { distance, carbonFootprint });
+    // Calcul des émissions de base pour un trajet
+    const emissionFactor = getEmissionFactor(distance, cabinClass); // Utiliser la distance simple pour le facteur
+    const singleTripEmissions = distance * emissionFactor;
+    const takeoffLandingEmissions = 25 * (isRoundTrip ? 2 : 1); // 25kg par décollage/atterrissage
 
-    const baseEmissions = carbonFootprint + takeoffLandingEmissions;
+    // Calcul des émissions totales
+    const totalEmissions = singleTripEmissions * tripFactor;
+    const baseEmissions = totalEmissions + takeoffLandingEmissions;
     const contrailImpact = baseEmissions * CONTRAIL_FACTOR;
 
     // Calcul des alternatives
     const alternatives = {
       train: {
-        emissions: distance * TRANSPORT_EMISSIONS.TRAIN,
-        duration: Math.ceil(distance / TRANSPORT_SPEEDS.TRAIN * 60), // en minutes
-        available: distance < 1000 // Le train est considéré comme viable pour < 1000km
+        emissions: totalDistance * TRANSPORT_EMISSIONS.TRAIN,
+        duration: Math.ceil(totalDistance / TRANSPORT_SPEEDS.TRAIN * 60), // en minutes
+        available: totalDistance < 1000 // Le train est considéré comme viable pour < 1000km
       },
       bus: {
-        emissions: distance * TRANSPORT_EMISSIONS.BUS,
-        duration: Math.ceil(distance / TRANSPORT_SPEEDS.BUS * 60),
-        available: distance < 1200 // Le bus est viable pour < 1200km
+        emissions: totalDistance * TRANSPORT_EMISSIONS.BUS,
+        duration: Math.ceil(totalDistance / TRANSPORT_SPEEDS.BUS * 60),
+        available: totalDistance < 1200 // Le bus est viable pour < 1200km
       },
       car: {
-        emissions: distance * TRANSPORT_EMISSIONS.CAR,
-        sharedEmissions: distance * TRANSPORT_EMISSIONS.CAR_SHARED,
-        duration: Math.ceil(distance / TRANSPORT_SPEEDS.CAR * 60),
-        available: distance < 1500 // La voiture est viable pour < 1500km
+        emissions: totalDistance * TRANSPORT_EMISSIONS.CAR,
+        sharedEmissions: totalDistance * TRANSPORT_EMISSIONS.CAR_SHARED,
+        duration: Math.ceil(totalDistance / TRANSPORT_SPEEDS.CAR * 60),
+        available: totalDistance < 1500 // La voiture est viable pour < 1500km
       }
     };
 
-    const flightDuration = Math.ceil(distance / PLANE_SPEED * 60); // en minutes
+    const flightDuration = Math.ceil(totalDistance / PLANE_SPEED * 60); // en minutes
 
     return NextResponse.json({
-      distance,
+      distance: totalDistance,
       carbonFootprint: baseEmissions,
       details: {
         flightType: distance < 1500 ? 'Court-courrier' : distance < 3500 ? 'Moyen-courrier' : 'Long-courrier',
         emissionFactor,
-        cruisingEmissions: carbonFootprint,
+        cruisingEmissions: totalEmissions,
         takeoffLandingEmissions,
         contrailImpact,
         totalImpact: baseEmissions + contrailImpact,
@@ -184,9 +196,9 @@ export async function POST(request: Request) {
       }
     });
   } catch (error) {
-    console.error('Erreur complète:', error);
+    console.error('API Error:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Erreur lors du calcul" },
+      { error: error instanceof Error ? error.message : "Une erreur est survenue" },
       { status: 500 }
     );
   }

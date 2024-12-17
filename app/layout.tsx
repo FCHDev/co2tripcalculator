@@ -12,8 +12,11 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Calculateur CO₂ - Voyage",
+  title: "Calculateur CO₂",
   description: "Calculez l'empreinte carbone de vos voyages en avion",
+  icons: {
+    icon: '/plane.png',
+  },
 };
 
 export default function RootLayout({
@@ -23,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className={`${inter.className} ${poppins.className} min-h-screen bg-[#353036]`}>
+      <body className={`${inter.className} ${poppins.className} min-h-screen bg-primary`}>
         {children}
       </body>
     </html>
